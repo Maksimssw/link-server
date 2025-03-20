@@ -1,24 +1,24 @@
-FROM node:18-alpine AS builder
+FROM node:20.17.0-alpine AS base
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
-RUN npm install
+RUN yarn install --frozen-lockfile
 
-COPY . .
+RUN yarn build
 
-RUN npm run build
+FROM base AS production
 
-FROM node:18-alpine
+ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package*.json ./
+COPY --from=build /app/package.json /app/yarn.lock
 
-EXPOSE 4000
+RUN yarn install --production --frozen-lockfile
 
-# Запускаем сервер
-CMD ["npm", "run", "start:prod"]
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/prisma/generated ./prisma/generated
+
+CMD ["node", "dist/main"]

@@ -16,7 +16,7 @@ FROM base AS build
 COPY . .
 
 # Генерируем Prisma клиент
-RUN yarn prisma generate && ls -la /app/prisma/generated && echo "Prisma client generated successfully"
+RUN yarn prisma generate
 
 # Собираем проект
 RUN yarn build

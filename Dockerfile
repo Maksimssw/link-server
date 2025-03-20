@@ -6,6 +6,12 @@ COPY package.json yarn.lock ./
 
 RUN yarn install --frozen-lockfile
 
+FROM base AS build
+
+COPY . .
+
+RUN yarn prisma generate
+
 RUN yarn build
 
 FROM base AS production

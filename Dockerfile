@@ -36,7 +36,6 @@ RUN yarn install --frozen-lockfile
 
 # Копируем собранные файлы и сгенерированный Prisma клиент
 COPY --from=build /app/dist ./dist
-COPY --from=build /app/prisma/generated ./prisma/generated
 COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /app/.env ./.env
 

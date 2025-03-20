@@ -38,7 +38,6 @@
     "geoip-lite": "^1.4.10",
     "i18n-iso-countries": "^7.14.0",
     "ioredis": "^5.6.0",
-    "nanoid": "^5.1.5",
     "prisma": "^6.5.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",

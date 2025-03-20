@@ -13,7 +13,10 @@ import { AnalyticsModule } from '@/src/modules/link/analytics/analytics.module'
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ ignoreEnvFile: !IS_DEV_ENV, isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      expandVariables: true,
+    }),
     ThrottlerModule.forRoot([
       {
         ttl: 60000,

@@ -1,20 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { LinkRepository } from '@/src/repositories/prisma/link.repositiry'
-import { customAlphabet } from 'nanoid'
-import { ConfigService } from '@nestjs/config'
+import { v4 as uuidv4 } from 'uuid';
 import { AppError } from '@/src/shared/utils/appError.util'
 import { ErrorStatus } from '@/src/shared/enum/error.enum'
 import { Link } from '@prisma/client'
 
 @Injectable()
 export class AliasService {
-	private readonly ALPHABET: string
-	private readonly ALIAS_LENGTH: number
+	private readonly ALIAS_LENGTH: number = 6
 
-	constructor(private readonly linkRepository: LinkRepository, private readonly configService: ConfigService) {
-		this.ALPHABET = this.configService.getOrThrow<string>('ALPHABET')
-		this.ALIAS_LENGTH = this.configService.getOrThrow<number>('ALIAS_LENGTH')
-	}
+	constructor(private readonly linkRepository: LinkRepository){}
 
 	public async isExist(alias: string): Promise<void | never> {
 		if (alias) {
@@ -37,13 +32,13 @@ export class AliasService {
 	}
 
 	public async generateUnique(): Promise<string> {
-		const generateAlias = customAlphabet(this.ALPHABET, this.ALIAS_LENGTH);
+		const generateAlias = uuidv4().replace(/-/g, '').substring(0, this.ALIAS_LENGTH);
 
 		let alias: string;
 		let isUnique = false;
 
 		while (!isUnique) {
-			alias = generateAlias()
+			alias = generateAlias
 
 			const existingLink = await this.linkRepository.findByAlias(alias)
 

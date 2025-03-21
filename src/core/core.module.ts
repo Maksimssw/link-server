@@ -16,6 +16,7 @@ import { AnalyticsModule } from '@/src/modules/link/analytics/analytics.module'
     ConfigModule.forRoot({
       isGlobal: true,
       expandVariables: true,
+      ignoreEnvFile: !IS_DEV_ENV,
     }),
     ThrottlerModule.forRoot([
       {
